@@ -1,0 +1,22 @@
+---
+- name: init | Update apt
+  apt: update_cache=yes
+
+- name: init | Install Sys Packages
+  apt: pkg={{ item }} state=latest
+  with_items: sys_packages
+
+- name: init | make sure python-software-properties is installed
+  apt: pkg=python-software-properties state=latest
+
+- name: init | Add php5 ppa Repository
+  apt_repository: repo='ppa:ondrej/php5'
+
+- name: init | Add ruby 2 ppa Repository
+  apt_repository: repo='ppa:brightbox/ruby-ng-experimental'  
+
+- name: init | Add nodejs ppa Repository
+  apt_repository: repo='ppa:chris-lea/node.js'      
+
+- name: init | Update apt
+  apt: update_cache=yes

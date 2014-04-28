@@ -1,0 +1,23 @@
+---
+- name: Start the MySQL service
+  action: service name=mysql state=started
+
+- name: update mysql root password for all root accounts
+  mysql_user: name=root host={{ item }} password={{ mysql_root_password }} priv=*.*:ALL,GRANT
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: copy .my.cnf file with root password credentials
+  template: src=files/mysql/my.cnf dest=/root/.my.cnf owner=root mode=0600
+
+- name: Edit the my.cnf to enable remote access
+  lineinfile: dest=/etc/mysql/my.cnf regexp='^bind-address' line='bind-address  = {{ansible_eth1.ipv4.address}}'
+
+- name: Grant access to mysql remote
+  command: mysql -u root --password={{ mysql_root_password }} -e "GRANT ALL ON *.* to root@'{{ansible_eth1.ipv4.address}}' IDENTIFIED BY '{{ mysql_root_password }}';"
+
+- name: Restart MySQL
+  command: sudo service mysql restart

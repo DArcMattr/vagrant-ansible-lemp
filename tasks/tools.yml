@@ -1,0 +1,20 @@
+---
+- name: tools | Install SASS
+  command: 'gem install sass'
+  sudo: yes
+
+- name: tools | Install Compass
+  command: 'gem install compass'
+  sudo: yes
+
+- name: tools | Install Grunt
+  command: 'npm install -g grunt-cli'
+  sudo: yes  
+
+- name: tools | Install Bower
+  command: 'npm install -g bower'
+  sudo: yes
+
+- name: tools | Install Yeoman
+  command: 'npm install -g yo'
+  sudo: yes  

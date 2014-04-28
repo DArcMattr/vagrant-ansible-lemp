@@ -1,0 +1,8 @@
+---
+- name: ruby | Install Ruby 2
+  apt: pkg={{item}}
+  with_items: ['ruby2.0', 'ruby2.0-dev', 'ruby2.0-doc']
+
+- name: ruby | Change default version to 2.0
+  command: 'ruby-switch --set ruby2.0'
+  sudo: yes

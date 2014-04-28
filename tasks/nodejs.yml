@@ -1,0 +1,4 @@
+---
+- name: nodejs | Install nodejs
+  apt: pkg=nodejs
+

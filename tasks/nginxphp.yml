@@ -1,0 +1,21 @@
+---
+- name: nginxphp | Install Nginx
+  apt: pkg=nginx state=latest
+
+- name: nginxphp | Install php5-fpm
+  apt: pkg=php5-fpm state=latest
+
+- name: Create the virtualhosts
+  template: src=files/nginx/default.tpl dest=/etc/nginx/sites-available/{{ item.file }}
+  with_items: vhosts
+  sudo: yes   
+  notify: restart nginx
+
+- name: Add the virtualhosts to the file /etc/hosts
+  lineinfile: dest=/etc/hosts line="127.0.0.1 {{item.server_name}}"
+  sudo: yes
+  with_items: vhosts  
+
+- name: nginxphp | Install PHP Packages
+  apt: pkg={{ item }} state=latest
+  with_items: php_packages
